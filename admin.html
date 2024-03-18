@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body>
+    <header class="header">
+      <a href="index.html" class="logo">Celestin</a>
+      <nav class="navbar">
+        <a href="index.html">Home</a>
+      </nav>
+    </header>
+
+    <div class="admin-panel">
+      <nav class="admin-nav">
+        <ul>
+          <li><a href="#dashboard">Dashboard</a></li>
+          <li><a href="#manage-posts" class="active">Manage Posts</a></li>
+          <li><a href="#settings">Settings</a></li>
+        </ul>
+      </nav>
+      <div class="content">
+        <h1>Manage Blog Posts</h1>
+        <div class="posts-list"></div>
+        <div class="post-form">
+          <h2>Create/Edit Post</h2>
+          <input type="text" placeholder="Title" id="post-title" />
+          <textarea placeholder="Content" id="post-content"></textarea>
+          <button>Save Post</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
