@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - My Brand</title>
+    <link rel="stylesheet" href="login.css" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="header">
+      <a href="#" class="logo">Celestin</a>
+      <nav class="navbar">
+        <a href="index.html">Home</a>
+      </nav>
+    </header>
+
+    <div class="container">
+      <form class="form" id="loginForm">
+        <h2>Login to Your Account</h2>
+        <div class="input-group">
+          <input type="email" id="email" placeholder="Email" required />
+        </div>
+        <div class="input-group">
+          <input
+            type="password"
+            id="password"
+            placeholder="Password"
+            required
+          />
+        </div>
+        <div class="remember-me">
+          <input type="checkbox" id="remember-me" />
+          <label for="remember-me">Remember Me</label>
+        </div>
+        <a href="#" class="forgot-password">Forgot Password?</a>
+        <button type="submit" class="btn">Login</button>
+      </form>
+    </div>
+
+    <script>
+      document.getElementById("loginForm").onsubmit = function (event) {
+        event.preventDefault();
+
+        var email = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
+
+        var emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if (!emailRegex.test(email)) {
+          alert("Please enter a valid email address.");
+          return false;
+        }
+
+        var passwordRegex =
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!passwordRegex.test(password)) {
+          alert(
+            "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character, with a minimum of 8 characters."
+          );
+          return false;
+        }
+
+        window.location.href = "admin.html";
+      };
+    </script>
+  </body>
+</html>
