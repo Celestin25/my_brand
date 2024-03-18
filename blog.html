@@ -7,31 +7,77 @@
     <link rel="stylesheet" href="blog.css" />
   </head>
   <body>
-    <section class="blog" id="blog">
+    <header class="site-header">
+      <div class="container header-container">
+        <a href="#" class="logo">Celestin</a>
+        <nav class="site-nav">
+          <a href="index.html">Home</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="blog-content">
       <div class="container">
-        <h2 class="title">Latest Blog Posts</h2>
+        <h2 class="blog-title">Latest Blog Posts</h2>
         <div class="blog-posts">
-          <div class="blog-post">
-            <img src="" alt="Blog Image" />
+          <article class="blog-post">
+            <img
+              src="https://d1ub0o53i85pdh.cloudfront.net/uploads/2021/09/Facebook-Linkedin-image-template-10.jpg"
+              alt="Blog Image"
+              class="post-image"
+            />
             <div class="post-content">
-              <h3></h3>
-              <p></p>
+              <h3>Full-Stack Development</h3>
+              <p>
+                Full-stack development encompasses mastery of both front-end and
+                back-end technologies, enabling developers to create
+                comprehensive web applications. In front-end development,
+                proficiency in HTML, CSS, and JavaScript is combined with
+                frameworks like React or Angular to design engaging user
+                interfaces. On the back end, technologies like Node.js or Python
+                with frameworks like Django handle data storage, business logic,
+                and server-side operations. Full-stack developers leverage their
+                holistic understanding to bridge design and functionality
+                seamlessly, embracing innovation to stay ahead in the rapidly
+                evolving digital landscape.
+              </p>
               <a href="#" class="btn">Read More</a>
+              <div class="actions">
+                <button class="edit-btn">Edit</button>
+                <button class="delete-btn">Delete</button>
+              </div>
             </div>
-          </div>
-          <div class="blog-post">
-            <img src="" alt="Blog Image" />
+          </article>
+
+          <article class="blog-post">
+            <img
+              src="https://www.informatec.com/sites/default/files/image-seperator/machine-learning-separator-1.jpg"
+              alt="Blog Image"
+              class="post-image"
+            />
             <div class="post-content">
-              <h3></h3>
-              <p></p>
+              <h3>Machine Learning in Digital Evolution</h3>
+              <p>
+                Machine learning revolutionizes digital experiences by
+                uncovering patterns and insights from data. Algorithms analyze
+                vast datasets to make predictions and automate decision-making
+                processes accurately. Integrating machine learning into web
+                applications enables personalized experiences and predictive
+                analytics. Developers leverage frameworks like TensorFlow.js and
+                sci-kit-learn to seamlessly deploy models, driving innovation
+                and creating more intelligent, adaptive solutions that
+                anticipate and meet user needs effectively.
+              </p>
               <a href="#" class="btn">Read More</a>
+              <div class="actions">
+                <button class="edit-btn">Edit</button>
+                <button class="delete-btn">Delete</button>
+              </div>
             </div>
-          </div>
+          </article>
         </div>
       </div>
-    </section>
-    <footer>
-      <a href="#"> <i class="bx bx-up-arrow-alt"></i></a>
-    </footer>
+    </main>
+  
   </body>
 </html>
