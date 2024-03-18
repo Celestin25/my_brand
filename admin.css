@@ -1,0 +1,108 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;1,500&display=swap");
+
+body,
+html {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #000;
+  color: #fff;
+}
+
+.header {
+  position: relative;
+  background-color: #111;
+  padding: 1rem 10%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.logo {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.9rem;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+}
+
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.5rem;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.navbar a:hover {
+  background-color: red;
+}
+
+.admin-panel {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.admin-nav {
+  flex-basis: 200px;
+  background-color: #1a1a1a;
+  padding: 20px;
+}
+
+.admin-nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+.admin-nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  display: block;
+  padding: 10px 0;
+  transition: background-color 0.3s ease;
+}
+
+.admin-nav ul li a.active,
+.admin-nav ul li a:hover {
+  background-color: #333;
+}
+
+.content {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+@media screen and (max-width: 768px) {
+  .admin-nav {
+    flex-basis: 100%;
+  }
+
+  .content {
+    width: 100%;
+  }
+}
+
+.post-form input,
+.post-form textarea,
+.post-form button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 4px;
+  border: 1px solid #333;
+  background-color: #222;
+  color: #fff;
+}
+
+.post-form button {
+  cursor: pointer;
+  background-color: #14213d;
+  transition: background-color 0.3s ease;
+}
+
+.post-form button:hover {
+  background-color: #0a1625;
+}
