@@ -12,10 +12,8 @@
   </head>
   <body>
     <header class="header">
-      <a href="#" class="logo">Celestin</a>
-      <nav class="navbar">
-        <a href="index.html">Home</a>
-      </nav>
+      <a href="index.html" class="logo">Celestin</a>
+      <nav class="navbar"></nav>
     </header>
 
     <div class="container">
@@ -57,9 +55,7 @@
         var passwordRegex =
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
         if (!passwordRegex.test(password)) {
-          alert(
-            "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character, with a minimum of 8 characters."
-          );
+          alert("Wrong Password Please try again !.");
           return false;
         }
 
