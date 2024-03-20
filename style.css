@@ -615,6 +615,7 @@ textarea {
   transition: 0.3s ease;
   opacity: 0;
   transform: translateY(100px);
+  height: 80px;
 }
 section.start-animation textarea {
   animation: Bottom 1s ease forwards;
@@ -643,6 +644,7 @@ textarea {
   cursor: pointer;
   filter: none;
   border: 0.2rem solid white;
+  height: 50px;
 }
 section.start-animation .btn {
   animation: Bottom 1s ease forwards;
