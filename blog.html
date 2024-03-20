@@ -9,10 +9,8 @@
   <body>
     <header class="site-header">
       <div class="container header-container">
-        <a href="#" class="logo">Celestin</a>
-        <nav class="site-nav">
-          <a href="index.html">Home</a>
-        </nav>
+        <a href="index.html" class="logo">Celestin</a>
+        <nav class="site-nav"></nav>
       </div>
     </header>
 
@@ -44,7 +42,7 @@
               <a href="#" class="btn">Read More</a>
               <div class="actions">
                 <button class="like-btn">Like</button>
-                <span class="like-count">0</span> Likes
+                <span class="like-count">0</span>
                 <div class="comment-section">
                   <input
                     type="text"
@@ -80,7 +78,7 @@
               <a href="#" class="btn">Read More</a>
               <div class="actions">
                 <button class="like-btn">Like</button>
-                <span class="like-count">0</span> Likes
+                <span class="like-count">0</span>
                 <div class="comment-section">
                   <input
                     type="text"
@@ -96,41 +94,62 @@
         </div>
       </div>
     </main>
-    <script>
-      function handleLike(event) {
-        const likeBtn = event.target;
-        const likeCount = likeBtn.nextElementSibling;
-        let count = parseInt(likeCount.textContent);
-        count++;
-        likeCount.textContent = count;
-        likeCount.nextSibling.textContent = count === 1 ? " Like" : " Likes";
-      }
 
-      function postComment(event) {
-        const commentBtn = event.target;
-        const commentInput = commentBtn.previousElementSibling;
-        const commentList = commentBtn.nextElementSibling;
-        if (commentInput.value.trim() === "") {
-          alert("Please enter a comment before posting.");
-          return;
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const blogPostsContainer = document.querySelector(".blog-posts");
+
+        // Load dynamic posts from localStorage
+        const blogPosts = JSON.parse(localStorage.getItem("blogPosts")) || [];
+        blogPosts.forEach((post) => {
+          const postElement = createPostElement(post);
+          blogPostsContainer.appendChild(postElement);
+        });
+
+        function createPostElement(post) {
+          const postElement = document.createElement("article");
+          postElement.className = "blog-post";
+          postElement.innerHTML = `
+                    <h3>${post.title}</h3>
+                    ${
+                      post.imageUrl
+                        ? `<img src="${post.imageUrl}" alt="Post Image" class="post-image">`
+                        : ""
+                    }
+                    <p>${post.content}</p>
+                    <button class="like-btn">Like</button>
+                    <span class="like-count" data-likes="0">0 Likes</span>
+                    <div class="comment-section">
+                        <input type="text" class="comment-input" placeholder="Leave a comment...">
+                        <button class="comment-btn">Comment</button>
+                        <ul class="comment-list"></ul>
+                    </div>
+                `;
+          return postElement;
         }
 
-        const newComment = document.createElement("li");
-        newComment.textContent = commentInput.value;
-        commentList.appendChild(newComment);
-        commentInput.value = "";
-      }
+        blogPostsContainer.addEventListener("click", function (event) {
+          if (event.target.classList.contains("like-btn")) {
+            const likeCountSpan = event.target.nextElementSibling;
+            let likes = parseInt(likeCountSpan.dataset.likes) || 0;
+            likes++;
+            likeCountSpan.dataset.likes = likes;
+            likeCountSpan.textContent = likes + " Likes";
+          }
 
-      document.addEventListener("DOMContentLoaded", function () {
-        const likeButtons = document.querySelectorAll(".like-btn");
-        likeButtons.forEach((button) =>
-          button.addEventListener("click", handleLike)
-        );
-
-        const commentButtons = document.querySelectorAll(".comment-btn");
-        commentButtons.forEach((button) =>
-          button.addEventListener("click", postComment)
-        );
+          if (event.target.classList.contains("comment-btn")) {
+            const commentInput = event.target.previousElementSibling;
+            const commentList = event.target.nextElementSibling;
+            if (commentInput.value.trim() === "") {
+              alert("Please enter a comment before posting.");
+              return;
+            }
+            const newComment = document.createElement("li");
+            newComment.textContent = commentInput.value;
+            commentList.appendChild(newComment);
+            commentInput.value = "";
+          }
+        });
       });
     </script>
   </body>
