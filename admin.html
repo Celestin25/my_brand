@@ -29,9 +29,95 @@
           <h2>Create/Edit Post</h2>
           <input type="text" placeholder="Title" id="post-title" />
           <textarea placeholder="Content" id="post-content"></textarea>
-          <button>Save Post</button>
+          <input type="text" placeholder="Image URL" id="post-image" />
+          <button id="save-post-btn" data-editing="false">Save Post</button>
         </div>
       </div>
     </div>
+    <script>
+      let blogPosts = JSON.parse(localStorage.getItem("blogPosts")) || [];
+      let editingPostId = null;
+
+      function savePosts() {
+        localStorage.setItem("blogPosts", JSON.stringify(blogPosts));
+        displayPosts();
+      }
+
+      function addOrEditPost() {
+        const title = document.getElementById("post-title").value.trim();
+        const content = document.getElementById("post-content").value.trim();
+        const imageUrl = document.getElementById("post-image").value.trim();
+
+        if (title === "" || content === "") {
+          alert("Both title and content are required.");
+          return;
+        }
+
+        const postData = { title, content, imageUrl };
+        if (editingPostId) {
+          const postIndex = blogPosts.findIndex(
+            (post) => post.id === editingPostId
+          );
+          if (postIndex !== -1) {
+            blogPosts[postIndex] = { ...blogPosts[postIndex], ...postData };
+          }
+        } else {
+          const newPost = { id: Date.now(), ...postData };
+          blogPosts.push(newPost);
+        }
+
+        savePosts();
+        clearForm();
+      }
+
+      function deletePost(id) {
+        blogPosts = blogPosts.filter((post) => post.id !== id);
+        savePosts();
+      }
+
+      function editPost(id) {
+        const post = blogPosts.find((post) => post.id === id);
+        if (post) {
+          document.getElementById("post-title").value = post.title;
+          document.getElementById("post-content").value = post.content;
+          document.getElementById("post-image").value = post.imageUrl || "";
+          editingPostId = id;
+          document.getElementById("save-post-btn").innerText = "Edit Post";
+        }
+      }
+
+      function clearForm() {
+        document.getElementById("post-title").value = "";
+        document.getElementById("post-content").value = "";
+        document.getElementById("post-image").value = "";
+        editingPostId = null;
+        document.getElementById("save-post-btn").innerText = "Save Post";
+      }
+
+      function displayPosts() {
+        const postsList = document.querySelector(".posts-list");
+        postsList.innerHTML = "";
+        blogPosts.forEach((post) => {
+          const postElem = document.createElement("div");
+          postElem.innerHTML = `
+            <h3>${post.title}</h3>
+            ${
+              post.imageUrl
+                ? `<img src="${post.imageUrl}" alt="Post Image" style="max-width: 100%; height: auto;">`
+                : ""
+            }
+            <p>${post.content}</p>
+            <button onclick="editPost(${post.id})">Edit</button>
+            <button onclick="deletePost(${post.id})">Delete</button>
+          `;
+          postsList.appendChild(postElem);
+        });
+      }
+
+      document
+        .getElementById("save-post-btn")
+        .addEventListener("click", addOrEditPost);
+      document.addEventListener("DOMContentLoaded", displayPosts);
+    </script>
   </body>
 </html>
