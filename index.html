@@ -21,10 +21,9 @@
         <a href="#portfolio" style="--vlr: 3">Portfolio</a>
         <a href="#skills" style="--vlr: 4">Skills</a>
         <a href="#contact" style="--vlr: 5">Contact Me</a>
-        <a href="http://127.0.0.1:5500/blog.html" style="--vlr: 6">Blog</a>
-        <a href="http://127.0.0.1:5500/login.html" style="--vlr: 7">Login</a>
+        <a href="http://127.0.0.1:5501/blog.html" style="--vlr: 6">Blog</a>
+        <a href="http://127.0.0.1:5501/login.html" style="--vlr: 7">Login</a>
         <a href="/admin.html">Admin Panel</a>
-
       </nav>
     </header>
 
@@ -130,7 +129,7 @@
             </div>
           </div>
         </div>
-      </div> 
+      </div>
     </section>
 
     <section class="skills" id="skills">
@@ -140,14 +139,14 @@
           <h3 class="skill-title">Skills</h3>
           <div class="skill-box skill-box1">
             <div class="single-skill">
-              <span class="topic">HTML</span>
+              <span class="topic">MongoDB</span>
               <span class="topic">80%</span>
             </div>
             <div class="bar-side">
               <div class="bar bar-1"></div>
             </div>
             <div class="single-skill">
-              <span class="topic">CSS</span>
+              <span class="topic">Node.js</span>
               <span class="topic">70%</span>
             </div>
             <div class="bar-side">
@@ -192,24 +191,18 @@
     </section>
     <section class="contact" id="contact">
       <h2 class="title">Contact<span>Me</span></h2>
-      <form action="#" id="">
+
+      <form action="#" id="contactForm">
         <div class="input-box">
-          <input type="text" required placeholder="Full Name" />
-          <input type="email" required placeholder="Email" />
+          <input type="text" required placeholder="Full Name" id="fullName" />
+          <input type="email" required placeholder="Email" id="email" />
         </div>
         <div class="input-box">
-          <input type="tel" required placeholder="Mobile Number" />
-          <input type="email" required placeholder="Subject For" />
+          <input type="tel" required placeholder="Mobile Number" id="phone" />
+          <input type="text" required placeholder="Subject" id="subject" />
         </div>
-        <textarea
-          name=""
-          id=""
-          cols="30"
-          rows="10"
-          placeholder="Message"
-          required
-        ></textarea>
-        <input type="submit" value="Send Message" class="btn" />
+        <textarea placeholder="Message" id="message" required></textarea>
+        <button type="submit" class="btn">Send Message</button>
       </form>
     </section>
     <footer>
