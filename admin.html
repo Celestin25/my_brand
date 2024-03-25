@@ -18,6 +18,7 @@
           <li><a href="#dashboard">Dashboard</a></li>
           <li><a href="#manage-posts" class="active">Manage Posts</a></li>
           <li><a href="#settings">Settings</a></li>
+          <button onclick="logout()">Logout</button>
         </ul>
       </nav>
       <div class="content">
@@ -27,6 +28,7 @@
           <h2>Create/Edit Post</h2>
           <input type="text" placeholder="Title" id="post-title" />
           <textarea placeholder="Content" id="post-content"></textarea>
+          <input type="file" id="post-image-upload" accept="image/*" />
           <input type="text" placeholder="Image URL" id="post-image" />
           <button id="save-post-btn" data-editing="false">Save Post</button>
         </div>
@@ -125,33 +127,94 @@
         .getElementById("save-post-btn")
         .addEventListener("click", addOrEditPost);
       document.addEventListener("DOMContentLoaded", displayPosts);
-      //
+      //displaying messages
       function loadDashboardMessages() {
         const messageContainer = document.getElementById("messageContainer");
-        const contactMessages = JSON.parse(localStorage.getItem("contactMessages")) || [];
-      
-        if (contactMessages.length === 0) {
-          messageContainer.innerHTML = "No messages received.";
-          return;
-        }
-      
-        messageContainer.innerHTML = ""; 
-      
-        
-        const maxMessagesToShow = 5;
-        contactMessages.slice(-maxMessagesToShow).forEach(msg => {
+        const contactMessages =
+          JSON.parse(localStorage.getItem("contactMessages")) || [];
+        messageContainer.innerHTML = "";
+
+        contactMessages.forEach((msg, index) => {
           const msgElement = document.createElement("div");
           msgElement.classList.add("dashboard-message");
           msgElement.innerHTML = `
-            <h4>From: ${msg.fullName}</h4>
-            <p>Message: ${msg.message.substring(0, 100)}${msg.message.length > 100 ? '...' : ''}</p>
-            <small>Received on: ${new Date(msg.date).toLocaleDateString()}</small>
-          `;
+                <h4>From: ${msg.fullName}</h4>
+                <p>Message: ${msg.message.substring(0, 100)}${
+            msg.message.length > 100 ? "..." : ""
+          }</p>
+                <small>Received on: ${new Date(
+                  msg.date
+                ).toLocaleString()}</small>
+                <button class="delete-message-btn" data-index="${index}">Delete</button>
+            `;
           messageContainer.appendChild(msgElement);
         });
+
+        document.querySelectorAll(".delete-message-btn").forEach((button) => {
+          button.addEventListener("click", function () {
+            deleteMessage(this.getAttribute("data-index"));
+          });
+        });
       }
-      
+      function deleteMessage(index) {
+        const contactMessages =
+          JSON.parse(localStorage.getItem("contactMessages")) || [];
+        contactMessages.splice(index, 1);
+        localStorage.setItem(
+          "contactMessages",
+          JSON.stringify(contactMessages)
+        );
+        loadDashboardMessages();
+      }
       document.addEventListener("DOMContentLoaded", loadDashboardMessages);
+
+      // uploading image
+
+      document
+        .getElementById("save-post-btn")
+        .addEventListener("click", function (event) {
+          event.preventDefault();
+
+          const title = document.getElementById("post-title").value.trim();
+          const content = document.getElementById("post-content").value.trim();
+          const imageFile =
+            document.getElementById("post-image-upload").files[0];
+
+          if (title === "" || content === "") {
+            alert("Both title and content are required.");
+            return;
+          }
+
+          if (imageFile) {
+            const reader = new FileReader();
+            reader.onloadend = function () {
+              const base64Image = reader.result;
+              savePost(title, content, base64Image);
+            };
+            reader.readAsDataURL(imageFile);
+          } else {
+            savePost(title, content);
+          }
+        });
+
+      function savePost(title, content, imageUrl = "") {
+        const postData = { title, content, imageUrl };
+        if (editingPostId) {
+          const postIndex = blogPosts.findIndex(
+            (post) => post.id === editingPostId
+          );
+          if (postIndex !== -1) {
+            blogPosts[postIndex] = { ...blogPosts[postIndex], ...postData };
+          }
+        } else {
+          const newPost = { id: Date.now(), ...postData };
+          blogPosts.push(newPost);
+        }
+
+        localStorage.setItem("blogPosts", JSON.stringify(blogPosts));
+        displayPosts();
+        clearForm();
+      }
     </script>
   </body>
 </html>
