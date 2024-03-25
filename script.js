@@ -32,41 +32,14 @@ document
   .addEventListener("submit", function (event) {
     event.preventDefault();
 
-    const fullName = document.getElementById("fullName").value;
-    const email = document.getElementById("email").value;
-    const phone = document.getElementById("phone").value;
-    const subject = document.getElementById("subject").value;
-    const message = document.getElementById("message").value;
+    const fullName = document.getElementById("fullName").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const subject = document.getElementById("subject").value.trim();
+    const message = document.getElementById("message").value.trim();
 
-    const contactMessages =
-      JSON.parse(localStorage.getItem("contactMessages")) || [];
-    contactMessages.push({
-      fullName,
-      email,
-      phone,
-      subject,
-      message,
-      date: new Date().toISOString(),
-    });
-    localStorage.setItem("contactMessages", JSON.stringify(contactMessages));
-
-    alert("Message sent successfully!");
-    document.getElementById("contactForm").reset();
-  });
-document
-  .getElementById("contactForm")
-  .addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    var fullName = document.getElementById("fullName").value.trim();
-    var email = document.getElementById("email").value.trim();
-    var phone = document.getElementById("phone").value.trim();
-    var subject = document.getElementById("subject").value.trim();
-    var message = document.getElementById("message").value.trim();
-
-    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    var phoneRegex = /^\d{10}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^\d{10}$/;
 
     if (!fullName) {
       alert("Please enter your full name.");
@@ -93,7 +66,18 @@ document
       return;
     }
 
-    console.log("Form is valid. Handling submission...");
+    const contactMessages =
+      JSON.parse(localStorage.getItem("contactMessages")) || [];
+    contactMessages.push({
+      fullName,
+      email,
+      phone,
+      subject,
+      message,
+      date: new Date().toISOString(),
+    });
+    localStorage.setItem("contactMessages", JSON.stringify(contactMessages));
 
     alert("Message sent successfully!");
+    document.getElementById("contactForm").reset();
   });
