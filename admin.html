@@ -215,6 +215,40 @@
         displayPosts();
         clearForm();
       }
+      //back-end for CRUD operations
+      document
+        .getElementById("save-post-btn")
+        .addEventListener("click", async function (event) {
+          event.preventDefault();
+          const title = document.getElementById("post-title").value;
+          const content = document.getElementById("post-content").value;
+          const imageUrl = document.getElementById("post-image").value; // Assuming this is a URL to the image
+
+          const blogPostData = { title, content, imageUrl };
+
+          try {
+            const response = await fetch("/api/posts", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(blogPostData),
+            });
+
+            if (response.ok) {
+              const newPost = await response.json();
+              console.log("Post created:", newPost);
+              alert("Post created successfully!");
+
+              window.location.reload();
+            } else {
+              alert("Failed to create post.");
+            }
+          } catch (error) {
+            console.error("Error creating post:", error);
+            alert("Error occurred. Please try again.");
+          }
+        });
     </script>
   </body>
 </html>

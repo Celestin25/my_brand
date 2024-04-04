@@ -99,7 +99,6 @@
       document.addEventListener("DOMContentLoaded", function () {
         const blogPostsContainer = document.querySelector(".blog-posts");
 
-        // Load dynamic posts from localStorage
         const blogPosts = JSON.parse(localStorage.getItem("blogPosts")) || [];
         blogPosts.forEach((post) => {
           const postElement = createPostElement(post);
@@ -151,6 +150,28 @@
           }
         });
       });
+      // Displaying the image
+
+      function createPostElement(post) {
+        const postElement = document.createElement("article");
+        postElement.className = "blog-post";
+        const imageHTML = post.imageUrl
+          ? `<img src="${post.imageUrl}" alt="Post Image" class="post-image">`
+          : "";
+        postElement.innerHTML = `
+      <h3>${post.title}</h3>
+      ${imageHTML}
+      <p>${post.content}</p>
+      <button class="like-btn">Like</button>
+      <span class="like-count" data-likes="0">0 Likes</span>
+      <div class="comment-section">
+          <input type="text" class="comment-input" placeholder="Leave a comment...">
+          <button class="comment-btn">Comment</button>
+          <ul class="comment-list"></ul>
+      </div>
+  `;
+        return postElement;
+      }
     </script>
   </body>
 </html>
