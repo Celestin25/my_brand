@@ -168,35 +168,6 @@
       }
       document.addEventListener("DOMContentLoaded", loadDashboardMessages);
 
-      // uploading image
-
-      document
-        .getElementById("save-post-btn")
-        .addEventListener("click", function (event) {
-          event.preventDefault();
-
-          const title = document.getElementById("post-title").value.trim();
-          const content = document.getElementById("post-content").value.trim();
-          const imageFile =
-            document.getElementById("post-image-upload").files[0];
-
-          if (title === "" || content === "") {
-            alert("Both title and content are required.");
-            return;
-          }
-
-          if (imageFile) {
-            const reader = new FileReader();
-            reader.onloadend = function () {
-              const base64Image = reader.result;
-              savePost(title, content, base64Image);
-            };
-            reader.readAsDataURL(imageFile);
-          } else {
-            savePost(title, content);
-          }
-        });
-
       function savePost(title, content, imageUrl = "") {
         const postData = { title, content, imageUrl };
         if (editingPostId) {
@@ -222,12 +193,13 @@
           event.preventDefault();
           const title = document.getElementById("post-title").value;
           const content = document.getElementById("post-content").value;
-          const imageUrl = document.getElementById("post-image").value; // Assuming this is a URL to the image
+          const imageUrl = document.getElementById("post-image").value;
 
           const blogPostData = { title, content, imageUrl };
+          console.log("Blog Body: ", blogPostData);
 
           try {
-            const response = await fetch("/api/posts", {
+            const response = await fetch("http://127.0.0.1:3000/api/posts", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -238,9 +210,9 @@
             if (response.ok) {
               const newPost = await response.json();
               console.log("Post created:", newPost);
-              alert("Post created successfully!");
+              //alert("Post created successfully!");
 
-              window.location.reload();
+              //window.location.reload();
             } else {
               alert("Failed to create post.");
             }
@@ -249,6 +221,30 @@
             alert("Error occurred. Please try again.");
           }
         });
+      // logout
+      function logout() {
+        fetch("http://localhost:3000/logout")
+          .then(() => {
+            window.location.href = "login.html"; 
+          })
+          .catch((error) => console.error("Error logging out:", error));
+      }
+      // cloudinary codes
+      document.getElementById('imageUploadForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+      
+        const formData = new FormData(this);
+      
+        fetch('http://localhost:3000/upload', {
+          method: 'POST',
+          body: formData,
+        })
+        .then(response => response.json())
+        .then(data => console.log('Success:', data))
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+      });      
     </script>
   </body>
 </html>

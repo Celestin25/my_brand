@@ -6,6 +6,7 @@ exports.getAllPosts = async (req, res) => {
 };
 
 exports.createPost = async (req, res) => {
+  console.log("Body: ", req.body);
   const newPost = new BlogPost(req.body);
   await newPost.save();
   res.status(201).json(newPost);
