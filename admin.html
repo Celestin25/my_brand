@@ -225,26 +225,65 @@
       function logout() {
         fetch("http://localhost:3000/logout")
           .then(() => {
-            window.location.href = "login.html"; 
+            window.location.href = "login.html";
           })
           .catch((error) => console.error("Error logging out:", error));
       }
       // cloudinary codes
-      document.getElementById('imageUploadForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-      
-        const formData = new FormData(this);
-      
-        fetch('http://localhost:3000/upload', {
-          method: 'POST',
-          body: formData,
-        })
-        .then(response => response.json())
-        .then(data => console.log('Success:', data))
-        .catch((error) => {
-          console.error('Error:', error);
+      document
+        .getElementById("imageUploadForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const formData = new FormData(this);
+
+          fetch("http://localhost:3000/upload", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then((data) => console.log("Success:", data))
+            .catch((error) => {
+              console.error("Error:", error);
+            });
         });
-      });      
+      //accessible of admin page
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("http://localhost:3000/session-check", {
+          credentials: "include",
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (!data.loggedIn) {
+              window.location.href = "/login.html";
+            }
+          })
+          .catch((error) => console.error("Error verifying session:", error));
+      });
+
+      function logout() {
+        fetch("/logout", { credentials: "include" })
+          .then(() => (window.location.href = "/login.html"))
+          .catch((error) => console.error("Logout failed:", error));
+      }
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("/session-check", { credentials: "include" })
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error("Session check failed");
+          })
+          .then((data) => {
+            if (!data.loggedIn) {
+              window.location.href = "/login.html";
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            window.location.href = "/login.html";
+          });
+      });
     </script>
   </body>
 </html>

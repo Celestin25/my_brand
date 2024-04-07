@@ -45,7 +45,7 @@ app.use(
     secret: "your_secret_key",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false },
+    cookie: { secure: false, httpOnly: true },
   })
 );
 app.get("/logout", (req, res) => {
@@ -60,4 +60,30 @@ app.post("/login", (req, res) => {
   } else {
     res.json({ authorized: false, message: "Invalid credentials!" });
   }
+});
+app.get("/session-check", (req, res) => {
+  if (req.session.user) {
+    res.json({ loggedIn: true });
+  } else {
+    res.json({ loggedIn: false });
+  }
+});
+// for login
+app.get("/logout", (req, res) => {
+  req.session.destroy(() => {
+    res.redirect("/login.html");
+  });
+});
+
+function requireLogin(req, res, next) {
+  if (!req.session.user) {
+    return res.status(401).send("Unauthorized. Please login.");
+  }
+  next();
+}
+
+const path = require('path');
+
+app.get('/admin', requireLogin, (req, res) => {
+    res.sendFile(path.join(__dirname, 'path_to_your_admin_folder/admin.html'));
 });
