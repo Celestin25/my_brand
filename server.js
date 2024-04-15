@@ -82,8 +82,29 @@ function requireLogin(req, res, next) {
   next();
 }
 
-const path = require('path');
+const path = require("path");
+const ContactMessage = require("./models/ContactMessage");
 
-app.get('/admin', requireLogin, (req, res) => {
-    res.sendFile(path.join(__dirname, 'path_to_your_admin_folder/admin.html'));
+app.get("/admin", requireLogin, (req, res) => {
+  res.sendFile(path.join(__dirname, "path_to_your_admin_folder/admin.html"));
+});
+
+// contact
+
+app.use("/api", contactRoutes);
+
+app.post("/api/contact", (req, res) => {
+  console.log("Contact API Called with body:", req.body);
+});
+
+app.post("/api/contact", (req, res) => {
+  const contactMessage = new ContactMessage(req.body);
+  
+  contactMessage.save()
+      .then(result => {
+          res.status(201).send(result);
+      })
+      .catch(err => {
+          res.status(500).send("Error saving message: " + err);
+      });
 });

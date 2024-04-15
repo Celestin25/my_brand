@@ -21,6 +21,7 @@
           <button onclick="logout()">Logout</button>
         </ul>
       </nav>
+
       <div class="content">
         <h1>Manage Blog Posts</h1>
         <div class="posts-list"></div>
@@ -38,13 +39,20 @@
     <div id="dashboard">
       <h1>Dashboard</h1>
 
-      <div class="dashboard-messages">
+      <div class="dashboard-messages" id="">
         <h2>Recent Messages</h2>
         <div id="messageContainer">Loading messages...</div>
       </div>
     </div>
-
     <script>
+      const form = document.createElement("form");
+      form.id = "imageUploadForm";
+      form.action = "#";
+      form.innerHTML = `
+            <input type="file" id="post-image-upload" accept="image/*">
+            <button type="submit">Upload Image</button>
+        `;
+      //end of error
       let blogPosts = JSON.parse(localStorage.getItem("blogPosts")) || [];
       let editingPostId = null;
       function savePosts() {
@@ -56,13 +64,16 @@
         const title = document.getElementById("post-title").value.trim();
         const content = document.getElementById("post-content").value.trim();
         const imageUrl = document.getElementById("post-image").value.trim();
-
+        console.log("Befor Check");
+        console.log("title", title, "content", content);
         if (title === "" || content === "") {
           alert("Both title and content are required.");
           return;
         }
 
         const postData = { title, content, imageUrl };
+        console.log("Post Data", postData);
+
         if (editingPostId) {
           const postIndex = blogPosts.findIndex(
             (post) => post.id === editingPostId
@@ -72,6 +83,7 @@
           }
         } else {
           const newPost = { id: Date.now(), ...postData };
+          console.log("New Post", newPost);
           blogPosts.push(newPost);
         }
 
@@ -102,6 +114,55 @@
         editingPostId = null;
         document.getElementById("save-post-btn").innerText = "Save Post";
       }
+      // Displaying content and Title
+
+      document
+        .getElementById("save-post-btn")
+        .addEventListener("click", async function (event) {
+          event.preventDefault();
+
+          const title = document.getElementById("post-title").value.trim();
+          const content = document.getElementById("post-content").value.trim();
+          const imageUrl = document.getElementById("post-image").value.trim();
+
+          if (!title || !content) {
+            alert("Both title and content are required.");
+            return;
+          }
+
+          const blogPostData = { title, content, imageUrl };
+          console.log("Blog Body: ", blogPostData);
+
+          try {
+            const response = await fetch("http://127.0.0.1:3000/api/posts", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(blogPostData),
+            });
+
+            if (response.ok) {
+              const newPost = await response.json();
+              console.log("Post created:", newPost);
+              alert("Post created successfully!");
+              clearForm();
+            } else {
+              alert("Failed to create post. Status: " + response.status);
+            }
+          } catch (error) {
+            console.error("Error creating post:", error);
+            alert("Error occurred. Please try again.");
+          }
+        });
+
+      function clearForm() {
+        document.getElementById("post-title").value = "";
+        document.getElementById("post-content").value = "";
+        document.getElementById("post-image").value = "";
+        document.getElementById("save-post-btn").innerText = "Save Post";
+      }
+      // End of Displaying title and content
 
       function displayPosts() {
         const postsList = document.querySelector(".posts-list");
@@ -186,41 +247,7 @@
         displayPosts();
         clearForm();
       }
-      //back-end for CRUD operations
-      document
-        .getElementById("save-post-btn")
-        .addEventListener("click", async function (event) {
-          event.preventDefault();
-          const title = document.getElementById("post-title").value;
-          const content = document.getElementById("post-content").value;
-          const imageUrl = document.getElementById("post-image").value;
 
-          const blogPostData = { title, content, imageUrl };
-          console.log("Blog Body: ", blogPostData);
-
-          try {
-            const response = await fetch("http://127.0.0.1:3000/api/posts", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(blogPostData),
-            });
-
-            if (response.ok) {
-              const newPost = await response.json();
-              console.log("Post created:", newPost);
-              //alert("Post created successfully!");
-
-              //window.location.reload();
-            } else {
-              alert("Failed to create post.");
-            }
-          } catch (error) {
-            console.error("Error creating post:", error);
-            alert("Error occurred. Please try again.");
-          }
-        });
       // logout
       function logout() {
         fetch("http://localhost:3000/logout")
@@ -229,7 +256,8 @@
           })
           .catch((error) => console.error("Error logging out:", error));
       }
-      // cloudinary codes
+      //cloudinary codes
+    
       document
         .getElementById("imageUploadForm")
         .addEventListener("submit", function (e) {
@@ -247,6 +275,7 @@
               console.error("Error:", error);
             });
         });
+
       //accessible of admin page
       document.addEventListener("DOMContentLoaded", function () {
         fetch("http://localhost:3000/session-check", {
@@ -284,6 +313,48 @@
             window.location.href = "/login.html";
           });
       });
+      // contact
+      function loadContactMessages() {
+        fetch("http://127.0.0.1:3000/api/contact", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((messages) => {
+            console.log("Messages fetched:", messages);
+            displayMessages(messages);
+          })
+          .catch((error) => {
+            console.error("Failed to fetch messages:", error);
+          });
+      }
+
+      function displayMessages(messages) {
+        const messageContainer = document.getElementById("messageContainer");
+        messageContainer.innerHTML = "";
+        messages.forEach((msg) => {
+          const msgElement = document.createElement("div");
+          msgElement.classList.add("dashboard-message");
+          msgElement.innerHTML = `
+                <h4>From: ${msg.name}</h4>
+                <p>Message: ${msg.message.substring(0, 100)}${
+            msg.message.length > 100 ? "..." : ""
+          }</p>
+                <small>Received on: ${new Date(
+                  msg.createdAt
+                ).toLocaleString()}</small>
+            `;
+          messageContainer.appendChild(msgElement);
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        loadContactMessages();
+      });
+      
+    
     </script>
   </body>
 </html>
