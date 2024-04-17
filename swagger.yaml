@@ -1,0 +1,180 @@
+openapi: 3.0.0
+info:
+  title: My Brand API Documentation
+  description: API documentation for My Brand application
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+paths:
+  /api/login:
+    post:
+      summary: Log in to the application
+      description: Endpoint to authenticate users and log in.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: The username of the user.
+                password:
+                  type: string
+                  description: The password of the user.
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/posts:
+    get:
+      summary: Get all blog posts
+      description: Retrieves all the blog posts available.
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BlogPost'
+    post:
+      summary: Create a new blog post
+      description: Endpoint to create a new blog post.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogPost'
+      responses:
+        '201':
+          description: Post created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPost'
+  /api/posts/{id}:
+    get:
+      summary: Get a specific blog post
+      description: Retrieves a specific blog post by its ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the blog post.
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPost'
+    put:
+      summary: Update a blog post
+      description: Updates an existing blog post.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the blog post.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogPost'
+      responses:
+        '200':
+          description: Post updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPost'
+    delete:
+      summary: Delete a blog post
+      description: Deletes a specific blog post by its ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the blog post.
+      responses:
+        '204':
+          description: Post deleted successfully
+  /api/contact:
+    post:
+      summary: Handle contact form submission
+      description: Endpoint to handle submissions from the contact form.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactMessage'
+      responses:
+        '201':
+          description: Message sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactMessage'
+components:
+  schemas:
+    LoginResponse:
+      type: object
+      properties:
+        authorized:
+          type: boolean
+          description: Indicates if the login was successful.
+        message:
+          type: string
+          description: Message describing the login status.
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message.
+    BlogPost:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the blog post.
+        content:
+          type: string
+          description: Content of the blog post.
+        imageUrl:
+          type: string
+          description: URL of the image associated with the blog post.
+    ContactMessage:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the sender.
+        email:
+          type: string
+          format: email
+          description: Email of the sender.
+        message:
+          type: string
+          description: Message content.

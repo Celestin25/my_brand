@@ -99,12 +99,21 @@ app.post("/api/contact", (req, res) => {
 
 app.post("/api/contact", (req, res) => {
   const contactMessage = new ContactMessage(req.body);
-  
-  contactMessage.save()
-      .then(result => {
-          res.status(201).send(result);
-      })
-      .catch(err => {
-          res.status(500).send("Error saving message: " + err);
-      });
+
+  contactMessage
+    .save()
+    .then((result) => {
+      res.status(201).send(result);
+    })
+    .catch((err) => {
+      res.status(500).send("Error saving message: " + err);
+    });
 });
+// API Documentation
+
+const swaggerUi = require("swagger-ui-express");
+const YAML = require("yamljs");
+
+const swaggerDocument = YAML.load(path.join(__dirname, "swagger.yaml"));
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
