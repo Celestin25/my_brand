@@ -10,6 +10,10 @@ app.use(
     credentials: true,
   })
 );
+app.use(express.static(__dirname));
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "index.html"));
+});
 
 app.use(express.json());
 
@@ -117,6 +121,3 @@ const YAML = require("yamljs");
 const swaggerDocument = YAML.load(path.join(__dirname, "swagger.yaml"));
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
-
-
