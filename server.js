@@ -11,6 +11,9 @@ app.use(
   })
 );
 
+
+app.use(express.static(path.join(__dirname, '/')));
+
 app.use(express.json());
 
 const authRoutes = require("./routes/authRoutes");
