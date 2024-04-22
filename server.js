@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-
+const path = require("path");
 const app = express();
 
 app.use(
@@ -11,8 +11,11 @@ app.use(
   })
 );
 
+app.use(express.static(path.join(__dirname, "/")));
 
-app.use(express.static(path.join(__dirname, '/')));
+app.get("*", function (request, response) {
+  response.sendFile(path.join(__dirname, "index.html"));
+});
 
 app.use(express.json());
 
@@ -85,7 +88,7 @@ function requireLogin(req, res, next) {
   next();
 }
 
-const path = require("path");
+
 const ContactMessage = require("./models/ContactMessage");
 
 app.get("/admin", requireLogin, (req, res) => {
